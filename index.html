@@ -3,7 +3,16 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aura Piercing</title>
+  <title>Aura Piercing — Arte Humanizada e Sem Dor, Na Sua Casa</title>
+
+  <!-- SEO & Compartilhamento -->
+  <meta name="description" content="Aura Piercing: piercing premium a domicílio. Arte humanizada, procedimento sem dor, joias finas de ouro e platina. Atendimento privado e exclusivo.">
+  <meta property="og:title" content="Aura Piercing — Arte Humanizada e Sem Dor">
+  <meta property="og:description" content="Sua artista de piercing vai até você. Experiência premium, sem dor, com joias finas. Agende sua sessão privada.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://aurapiercing.com.br/og-image.jpg">
+  <meta name="theme-color" content="#111111">
+
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +48,17 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 20px rgba(139,26,43,0.3); } 50% { box-shadow: 0 0 40px rgba(139,26,43,0.5); } }
     @keyframes floatSlow { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(1deg); } }
+    @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
 
+    /* Animações acionadas por scroll via IntersectionObserver */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s ease, transform 0.75s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.22s; }
+    .reveal-delay-3 { transition-delay: 0.34s; }
+    .reveal-delay-4 { transition-delay: 0.46s; }
+
+    /* Animação só no carregamento do hero */
     .anim-fade-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
     .anim-delay-1 { animation-delay: 0.15s; }
     .anim-delay-2 { animation-delay: 0.3s; }
@@ -110,6 +129,12 @@
     .diff-card:hover::before { opacity: 1; }
     .diff-card:hover { transform: translateY(-4px); background: #242424; }
 
+    .step-card {
+      transition: all 0.4s ease;
+      position: relative;
+    }
+    .step-card:hover { transform: translateY(-4px); }
+
     .star-rating { color: #c4b9a8; }
 
     .noise-overlay {
@@ -122,6 +147,40 @@
 
     .content-layer { position: relative; z-index: 1; }
     body { box-sizing: border-box; }
+
+    /* Stats shimmer */
+    .stat-number {
+      background: linear-gradient(90deg, #c4b9a8 0%, #f5efe6 40%, #c4b9a8 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    /* Preço badge */
+    .price-badge {
+      border: 1px solid rgba(139,26,43,0.3);
+      background: rgba(139,26,43,0.06);
+      transition: all 0.3s ease;
+    }
+    .price-badge:hover {
+      border-color: rgba(139,26,43,0.5);
+      background: rgba(139,26,43,0.1);
+    }
+
+    /* Artista card */
+    .artist-frame {
+      position: relative;
+    }
+    .artist-frame::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, rgba(196,185,168,0.2), rgba(139,26,43,0.2), rgba(196,185,168,0.05));
+      z-index: 0;
+    }
 
     /* Botão flutuante WhatsApp */
     .whatsapp-float {
@@ -142,6 +201,16 @@
     .whatsapp-float:hover {
       transform: scale(1.12);
       box-shadow: 0 6px 30px rgba(37,211,102,0.65);
+    }
+
+    /* Linha de separação de seção */
+    .section-eyebrow {
+      display: inline-block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #8b1a2b;
     }
   </style>
  </head>
@@ -173,15 +242,16 @@
         <a href="#testimonials" class="nav-link font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70">Avaliações</a>
         <a href="https://wa.link/k8zq8d" target="_blank" rel="noopener noreferrer" class="nav-link font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70">Agendar</a>
       </div>
-      <button class="md:hidden text-cream-muted" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" aria-label="Menu">
+      <button class="md:hidden text-cream-muted" id="menuToggle" aria-label="Menu" aria-expanded="false">
         <i data-lucide="menu" style="width:22px;height:22px;"></i>
       </button>
      </div>
-     <div id="mobileMenu" class="hidden md:hidden px-6 pb-4 space-y-3">
-        <a href="#about" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70">Sobre</a>
-        <a href="#portfolio" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70">Portfólio</a>
-        <a href="#testimonials" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70">Avaliações</a>
-        <a href="https://wa.link/k8zq8d" target="_blank" rel="noopener noreferrer" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70">Agendar</a>
+     <div id="mobileMenu" class="hidden md:hidden px-6 pb-4 space-y-3 border-t border-cream-muted/8 pt-4">
+        <a href="#about" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70 py-1">Sobre</a>
+        <a href="#portfolio" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70 py-1">Portfólio</a>
+        <a href="#testimonials" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70 py-1">Avaliações</a>
+        <a href="#how" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70 py-1">Como Funciona</a>
+        <a href="https://wa.link/k8zq8d" target="_blank" rel="noopener noreferrer" class="block font-body text-xs tracking-[0.25em] uppercase text-cream-muted/70 py-1">Agendar</a>
      </div>
     </nav>
 
@@ -191,7 +261,7 @@
      <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
       <div class="text-center lg:text-left">
        <div class="anim-fade-up anim-delay-1 mb-4">
-        <span class="inline-block font-body text-[10px] tracking-[0.4em] uppercase text-crimson border border-crimson/30 px-4 py-1.5 rounded-full">Experiência Premium em Piercing</span>
+        <span class="inline-block font-body text-[10px] tracking-[0.4em] uppercase text-crimson border border-crimson/30 px-4 py-1.5 rounded-full">Experiência Premium em Piercing · São Paulo</span>
        </div>
        <h1 class="anim-fade-up anim-delay-2 font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-cream font-light leading-[1.1] mb-6">
         Arte Humanizada<br>e Sem Dor,<br><em class="text-crimson-light font-light">Na Sua Casa.</em>
@@ -199,11 +269,15 @@
        <p class="anim-fade-up anim-delay-3 font-body text-sm md:text-base text-cream-muted/60 font-light max-w-md mx-auto lg:mx-0 mb-10 leading-relaxed">
         Onde joias finas encontram precisão clínica. Seu corpo merece uma artista que trata cada piercing como uma obra de arte.
        </p>
-       <div class="anim-fade-up anim-delay-4">
+       <div class="anim-fade-up anim-delay-4 flex flex-col sm:flex-row items-center lg:items-start gap-4">
         <a href="https://wa.link/k8zq8d" target="_blank" rel="noopener noreferrer"
            class="btn-crimson bg-crimson hover:bg-crimson-light text-cream font-body text-sm tracking-[0.2em] uppercase px-10 py-4 rounded-sm inline-flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-crimson focus:ring-offset-2 focus:ring-offset-charcoal-deep">
          <span>Solicitar Orçamento</span>
          <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+        </a>
+        <a href="#portfolio" class="font-body text-xs tracking-[0.25em] uppercase text-cream-muted/50 hover:text-cream-muted/80 transition-colors flex items-center gap-2">
+         <span>Ver portfólio</span>
+         <i data-lucide="chevron-down" style="width:14px;height:14px;"></i>
         </a>
        </div>
       </div>
@@ -212,6 +286,7 @@
         <div class="absolute inset-0 border border-cream-muted/15 rounded-sm"></div>
         <div class="absolute inset-3 border border-cream-muted/8 rounded-sm"></div>
         <div class="absolute inset-6 rounded-sm overflow-hidden bg-gradient-to-br from-charcoal-light via-charcoal to-charcoal-deep flex items-center justify-center">
+         <!-- Placeholder: substitua por <img src="sua-foto.jpg" class="w-full h-full object-cover"> -->
          <svg viewBox="0 0 200 280" class="w-3/4 h-3/4 opacity-40" style="animation: floatSlow 6s ease-in-out infinite;">
           <defs>
            <linearGradient id="skinGrad" x1="0" y1="0" x2="1" y2="1">
@@ -249,31 +324,51 @@
      </div>
     </section>
 
-    <div class="gold-line max-w-xs mx-auto"></div>
+    <!-- Stats / Prova Social -->
+    <section class="py-10 border-y border-cream-muted/8">
+     <div class="max-w-5xl mx-auto px-6">
+      <div class="grid grid-cols-3 gap-4 text-center reveal">
+       <div class="py-4">
+        <p class="stat-number font-display text-3xl md:text-4xl font-light">+300</p>
+        <p class="font-body text-[10px] tracking-[0.3em] uppercase text-cream-muted/40 mt-1">Clientes atendidas</p>
+       </div>
+       <div class="py-4 border-x border-cream-muted/8">
+        <p class="stat-number font-display text-3xl md:text-4xl font-light">5 anos</p>
+        <p class="font-body text-[10px] tracking-[0.3em] uppercase text-cream-muted/40 mt-1">De experiência</p>
+       </div>
+       <div class="py-4">
+        <p class="stat-number font-display text-3xl md:text-4xl font-light">100%</p>
+        <p class="font-body text-[10px] tracking-[0.3em] uppercase text-cream-muted/40 mt-1">Satisfação garantida</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <div class="gold-line max-w-xs mx-auto mt-0"></div>
 
     <!-- Diferenciais -->
     <section id="about" class="py-20 md:py-28">
      <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16 anim-fade-up">
-        <span class="font-body text-[10px] tracking-[0.4em] uppercase text-crimson">Por que a Aura</span>
+      <div class="text-center mb-16 reveal">
+        <span class="section-eyebrow">Por que a Aura</span>
         <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3">O Diferencial Aura</h2>
       </div>
       <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
-       <div class="diff-card anim-fade-up anim-delay-1 bg-charcoal-light/50 border border-cream-muted/8 rounded-sm p-8 text-center">
+       <div class="diff-card reveal reveal-delay-1 bg-charcoal-light/50 border border-cream-muted/8 rounded-sm p-8 text-center">
         <div class="w-14 h-14 mx-auto mb-6 rounded-full border border-crimson/30 flex items-center justify-center">
           <i data-lucide="heart" style="width:24px;height:24px;color:#8b1a2b;"></i>
         </div>
         <h3 class="font-display text-xl text-cream mb-3">Arte Humanizada</h3>
         <p class="font-body text-sm text-cream-muted/50 font-light leading-relaxed">Cada piercing é uma conversa entre artista e tela. Estudamos sua anatomia para criar posicionamentos que são exclusivamente seus.</p>
        </div>
-       <div class="diff-card anim-fade-up anim-delay-2 bg-charcoal-light/50 border border-cream-muted/8 rounded-sm p-8 text-center">
+       <div class="diff-card reveal reveal-delay-2 bg-charcoal-light/50 border border-cream-muted/8 rounded-sm p-8 text-center">
         <div class="w-14 h-14 mx-auto mb-6 rounded-full border border-crimson/30 flex items-center justify-center">
           <i data-lucide="shield" style="width:24px;height:24px;color:#8b1a2b;"></i>
         </div>
         <h3 class="font-display text-xl text-cream mb-3">Procedimento Sem Dor</h3>
         <p class="font-body text-sm text-cream-muted/50 font-light leading-relaxed">Técnicas avançadas e ferramentas premium garantem o mínimo de desconforto. Nossas clientes descrevem como surpreendentemente suave.</p>
        </div>
-       <div class="diff-card anim-fade-up anim-delay-3 bg-charcoal-light/50 border border-cream-muted/8 rounded-sm p-8 text-center">
+       <div class="diff-card reveal reveal-delay-3 bg-charcoal-light/50 border border-cream-muted/8 rounded-sm p-8 text-center">
         <div class="w-14 h-14 mx-auto mb-6 rounded-full border border-crimson/30 flex items-center justify-center">
           <i data-lucide="crown" style="width:24px;height:24px;color:#8b1a2b;"></i>
         </div>
@@ -286,16 +381,61 @@
 
     <div class="gold-line max-w-xs mx-auto"></div>
 
+    <!-- Como Funciona -->
+    <section id="how" class="py-20 md:py-28">
+     <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <span class="section-eyebrow">Simples assim</span>
+        <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3">Como Funciona</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 relative">
+       <!-- linha conectora desktop -->
+       <div class="hidden md:block absolute top-10 left-[calc(16.7%+1rem)] right-[calc(16.7%+1rem)] h-px bg-gradient-to-r from-transparent via-cream-muted/20 to-transparent pointer-events-none"></div>
+
+       <div class="step-card reveal reveal-delay-1 text-center relative">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-charcoal-light border border-cream-muted/10 flex items-center justify-center relative">
+         <span class="font-display text-2xl text-crimson-light font-light">1</span>
+         <div class="absolute inset-0 rounded-full border border-crimson/10 scale-110 opacity-60"></div>
+        </div>
+        <h3 class="font-display text-lg text-cream mb-2">Entre em Contato</h3>
+        <p class="font-body text-sm text-cream-muted/45 font-light leading-relaxed">Mande uma mensagem no WhatsApp. Conversamos sobre o que você quer e tiramos todas as dúvidas.</p>
+       </div>
+
+       <div class="step-card reveal reveal-delay-2 text-center relative">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-charcoal-light border border-cream-muted/10 flex items-center justify-center relative">
+         <span class="font-display text-2xl text-crimson-light font-light">2</span>
+         <div class="absolute inset-0 rounded-full border border-crimson/10 scale-110 opacity-60"></div>
+        </div>
+        <h3 class="font-display text-lg text-cream mb-2">Agendamos Sua Sessão</h3>
+        <p class="font-body text-sm text-cream-muted/45 font-light leading-relaxed">Escolhemos juntas o melhor dia e horário. Você recebe todas as orientações de preparo com antecedência.</p>
+       </div>
+
+       <div class="step-card reveal reveal-delay-3 text-center relative">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-charcoal-light border border-cream-muted/10 flex items-center justify-center relative">
+         <span class="font-display text-2xl text-crimson-light font-light">3</span>
+         <div class="absolute inset-0 rounded-full border border-crimson/10 scale-110 opacity-60"></div>
+        </div>
+        <h3 class="font-display text-lg text-cream mb-2">Sua Arte, Em Casa</h3>
+        <p class="font-body text-sm text-cream-muted/45 font-light leading-relaxed">Chegamos com todo o equipamento esterilizado. Você relaxa enquanto a magia acontece no seu próprio espaço.</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <div class="gold-line max-w-xs mx-auto"></div>
+
     <!-- Portfólio -->
     <section id="portfolio" class="py-20 md:py-28">
      <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16 anim-fade-up">
-        <span class="font-body text-[10px] tracking-[0.4em] uppercase text-crimson">Nosso Trabalho</span>
+      <div class="text-center mb-16 reveal">
+        <span class="section-eyebrow">Nosso Trabalho</span>
         <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3">Portfólio</h2>
+        <p class="font-body text-sm text-cream-muted/40 font-light mt-3">Substitua os placeholders pelas suas fotos reais</p>
       </div>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-       <div class="portfolio-item anim-fade-up anim-delay-1 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
+       <div class="portfolio-item reveal reveal-delay-1 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
         <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-charcoal-light to-charcoal-deep">
+         <!-- Placeholder: substitua por <img src="foto1.jpg" class="w-full h-full object-cover"> -->
          <svg viewBox="0 0 100 100" class="w-16 h-16 opacity-30">
           <circle cx="50" cy="50" r="20" fill="none" stroke="#c4b9a8" stroke-width="0.8"/>
           <circle cx="50" cy="30" r="3" fill="#c4b9a8"/>
@@ -311,7 +451,7 @@
          </div>
         </div>
        </div>
-       <div class="portfolio-item anim-fade-up anim-delay-2 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
+       <div class="portfolio-item reveal reveal-delay-2 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
         <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-charcoal to-charcoal-deep">
          <svg viewBox="0 0 100 100" class="w-16 h-16 opacity-30">
           <ellipse cx="50" cy="55" rx="12" ry="16" fill="none" stroke="#c4b9a8" stroke-width="0.8"/>
@@ -330,7 +470,7 @@
          </div>
         </div>
        </div>
-       <div class="portfolio-item anim-fade-up anim-delay-3 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
+       <div class="portfolio-item reveal reveal-delay-3 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
         <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-charcoal-light to-charcoal">
          <svg viewBox="0 0 100 100" class="w-16 h-16 opacity-30">
           <path d="M35,50 Q50,25 65,50" fill="none" stroke="#c4b9a8" stroke-width="0.8"/>
@@ -348,7 +488,7 @@
          </div>
         </div>
        </div>
-       <div class="portfolio-item anim-fade-up anim-delay-4 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
+       <div class="portfolio-item reveal reveal-delay-4 relative aspect-[3/4] rounded-sm overflow-hidden bg-charcoal-light border border-cream-muted/8 group cursor-pointer">
         <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-charcoal-deep to-charcoal-light">
          <svg viewBox="0 0 100 100" class="w-16 h-16 opacity-30">
           <circle cx="50" cy="50" r="15" fill="none" stroke="#c4b9a8" stroke-width="0.8"/>
@@ -371,15 +511,103 @@
      </div>
     </section>
 
+    <div class="gold-line max-w-xs mx-auto"></div>
+
+    <!-- Artista / Quem Sou -->
+    <section id="artist" class="py-20 md:py-28">
+     <div class="max-w-5xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+       <!-- Foto da artista -->
+       <div class="reveal flex justify-center">
+        <div class="artist-frame relative w-64 h-80 sm:w-72 sm:h-96">
+         <div class="relative z-10 w-full h-full rounded-sm overflow-hidden bg-gradient-to-br from-charcoal-light to-charcoal-deep border border-cream-muted/10 flex items-center justify-center">
+          <!-- Placeholder: substitua por <img src="foto-artista.jpg" class="w-full h-full object-cover"> -->
+          <div class="text-center px-6">
+           <div class="w-16 h-16 mx-auto mb-4 rounded-full border border-crimson/30 flex items-center justify-center">
+            <i data-lucide="user" style="width:28px;height:28px;color:#8b1a2b;opacity:0.6;"></i>
+           </div>
+           <p class="font-body text-[10px] text-cream-muted/30 tracking-wider uppercase">Adicione sua foto aqui</p>
+          </div>
+         </div>
+         <!-- Decoração de canto -->
+         <div class="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-crimson/40 z-20"></div>
+         <div class="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-crimson/40 z-20"></div>
+        </div>
+       </div>
+       <!-- Texto -->
+       <div class="reveal reveal-delay-2 text-center md:text-left">
+        <span class="section-eyebrow">A artista</span>
+        <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3 mb-6">Sua Nome Aqui</h2>
+        <p class="font-body text-sm text-cream-muted/55 font-light leading-relaxed mb-5">
+         Há mais de 5 anos transformando corpos em telas de arte. Especializada em curadoria de orelhas e piercings de alta joalheria, acredita que cada detalhe — do posicionamento à escolha da joia — deve ser único para quem o usa.
+        </p>
+        <p class="font-body text-sm text-cream-muted/55 font-light leading-relaxed mb-8">
+         Formada em técnicas avançadas de piercing e certificada em biossegurança, leva a experiência de um estúdio premium diretamente à sua casa — com todo o cuidado, higiene e carinho que você merece.
+        </p>
+        <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+         <span class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/50 border border-cream-muted/15 px-3 py-1.5 rounded-full">Certificada em Biossegurança</span>
+         <span class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/50 border border-cream-muted/15 px-3 py-1.5 rounded-full">Joias em Ouro &amp; Platina</span>
+         <span class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/50 border border-cream-muted/15 px-3 py-1.5 rounded-full">Atendimento a Domicílio</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <div class="gold-line max-w-xs mx-auto"></div>
+
+    <!-- Preços -->
+    <section id="pricing" class="py-20 md:py-28">
+     <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <span class="section-eyebrow">Investimento</span>
+        <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3">Valores</h2>
+        <p class="font-body text-sm text-cream-muted/40 font-light mt-3 max-w-md mx-auto">Joias e procedimento inclusos. Consulta de personalização gratuita via WhatsApp.</p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-5">
+       <div class="price-badge reveal reveal-delay-1 rounded-sm p-7 text-center">
+        <i data-lucide="circle-dot" style="width:22px;height:22px;color:#8b1a2b;margin:0 auto 16px;display:block;"></i>
+        <h3 class="font-display text-lg text-cream mb-1">Piercing Único</h3>
+        <p class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/35 mb-5">Lóbulo, Nostril, Helix</p>
+        <p class="font-display text-3xl text-cream font-light">A partir de</p>
+        <p class="font-display text-4xl text-crimson-light font-light mt-1">R$ 180</p>
+        <p class="font-body text-[10px] text-cream-muted/35 mt-3 leading-relaxed">Inclui joia de aço cirúrgico ou titânio e kit de cuidados</p>
+       </div>
+       <div class="price-badge reveal reveal-delay-2 rounded-sm p-7 text-center border-crimson/30 bg-crimson/8 relative">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+         <span class="font-body text-[9px] tracking-[0.3em] uppercase bg-crimson text-cream px-3 py-1 rounded-full">Mais Pedido</span>
+        </div>
+        <i data-lucide="sparkles" style="width:22px;height:22px;color:#a62240;margin:0 auto 16px;display:block;"></i>
+        <h3 class="font-display text-lg text-cream mb-1">Curadoria Dupla</h3>
+        <p class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/35 mb-5">2 piercings na mesma sessão</p>
+        <p class="font-display text-3xl text-cream font-light">A partir de</p>
+        <p class="font-display text-4xl text-crimson-light font-light mt-1">R$ 320</p>
+        <p class="font-body text-[10px] text-cream-muted/35 mt-3 leading-relaxed">Inclui consultoria de posicionamento personalizada</p>
+       </div>
+       <div class="price-badge reveal reveal-delay-3 rounded-sm p-7 text-center">
+        <i data-lucide="crown" style="width:22px;height:22px;color:#8b1a2b;margin:0 auto 16px;display:block;"></i>
+        <h3 class="font-display text-lg text-cream mb-1">Curadoria Premium</h3>
+        <p class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/35 mb-5">3+ piercings ou joias em ouro</p>
+        <p class="font-display text-3xl text-cream font-light">A partir de</p>
+        <p class="font-display text-4xl text-crimson-light font-light mt-1">R$ 500</p>
+        <p class="font-body text-[10px] text-cream-muted/35 mt-3 leading-relaxed">Experiência completa com joias ouro 14k ou platina</p>
+       </div>
+      </div>
+      <p class="text-center font-body text-xs text-cream-muted/30 mt-8 reveal">Valores podem variar conforme região de atendimento e tipo de joia. Consulte via WhatsApp para orçamento exato.</p>
+     </div>
+    </section>
+
+    <div class="gold-line max-w-xs mx-auto"></div>
+
     <!-- Depoimentos -->
     <section id="testimonials" class="py-20 md:py-28" style="background: linear-gradient(180deg, rgba(245,239,230,0.03) 0%, rgba(245,239,230,0.06) 50%, rgba(245,239,230,0.03) 100%);">
      <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16 anim-fade-up">
-        <span class="font-body text-[10px] tracking-[0.4em] uppercase text-crimson">O que dizem</span>
+      <div class="text-center mb-16 reveal">
+        <span class="section-eyebrow">O que dizem</span>
         <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3">Avaliações Reais</h2>
       </div>
       <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
-       <div class="testimonial-card anim-fade-up anim-delay-1 bg-charcoal-light/80 border border-cream-muted/10 rounded-sm p-7">
+       <div class="testimonial-card reveal reveal-delay-1 bg-charcoal-light/80 border border-cream-muted/10 rounded-sm p-7">
         <div class="star-rating flex gap-1 mb-4">
           <i data-lucide="star" style="width:14px;height:14px;fill:#c4b9a8;stroke:none;"></i>
           <i data-lucide="star" style="width:14px;height:14px;fill:#c4b9a8;stroke:none;"></i>
@@ -398,7 +626,7 @@
          </div>
         </div>
        </div>
-       <div class="testimonial-card anim-fade-up anim-delay-2 bg-charcoal-light/80 border border-cream-muted/10 rounded-sm p-7">
+       <div class="testimonial-card reveal reveal-delay-2 bg-charcoal-light/80 border border-cream-muted/10 rounded-sm p-7">
         <div class="star-rating flex gap-1 mb-4">
           <i data-lucide="star" style="width:14px;height:14px;fill:#c4b9a8;stroke:none;"></i>
           <i data-lucide="star" style="width:14px;height:14px;fill:#c4b9a8;stroke:none;"></i>
@@ -417,7 +645,7 @@
          </div>
         </div>
        </div>
-       <div class="testimonial-card anim-fade-up anim-delay-3 bg-charcoal-light/80 border border-cream-muted/10 rounded-sm p-7">
+       <div class="testimonial-card reveal reveal-delay-3 bg-charcoal-light/80 border border-cream-muted/10 rounded-sm p-7">
         <div class="star-rating flex gap-1 mb-4">
           <i data-lucide="star" style="width:14px;height:14px;fill:#c4b9a8;stroke:none;"></i>
           <i data-lucide="star" style="width:14px;height:14px;fill:#c4b9a8;stroke:none;"></i>
@@ -440,14 +668,14 @@
      </div>
     </section>
 
-    <!-- CTA -->
+    <!-- CTA Final -->
     <section id="book" class="py-24 md:py-32 relative">
      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-crimson/[0.03] to-transparent pointer-events-none"></div>
      <div class="max-w-3xl mx-auto px-6 text-center relative">
-      <span class="font-body text-[10px] tracking-[0.4em] uppercase text-crimson anim-fade-up">Pronta?</span>
-      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-cream font-light mt-4 mb-4 anim-fade-up anim-delay-1">Sua Obra de Arte Espera</h2>
-      <p class="font-body text-sm text-cream-muted/50 font-light max-w-md mx-auto mb-10 anim-fade-up anim-delay-2">Agende sua sessão privada e viva o piercing como ele deve ser — pessoal, sem dor e perfeitamente seu.</p>
-      <div class="anim-fade-up anim-delay-3">
+      <span class="section-eyebrow reveal">Pronta?</span>
+      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl text-cream font-light mt-4 mb-4 reveal reveal-delay-1">Sua Obra de Arte Espera</h2>
+      <p class="font-body text-sm text-cream-muted/50 font-light max-w-md mx-auto mb-10 reveal reveal-delay-2">Agende sua sessão privada e viva o piercing como ele deve ser — pessoal, sem dor e perfeitamente seu.</p>
+      <div class="reveal reveal-delay-3">
        <a href="https://wa.link/k8zq8d" target="_blank" rel="noopener noreferrer"
           class="btn-crimson bg-crimson hover:bg-crimson-light text-cream font-body text-sm tracking-[0.2em] uppercase px-12 py-5 rounded-sm inline-flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-crimson focus:ring-offset-2 focus:ring-offset-charcoal-deep">
         <span>Solicitar Orçamento</span>
@@ -465,14 +693,21 @@
         <img src="logo.svg" alt="Aura Piercing" class="h-10 w-auto mx-auto opacity-40" style="filter: brightness(0) invert(1);">
        </div>
        <div class="gold-line w-16"></div>
+       <!-- Região de atendimento -->
+       <p class="font-body text-[10px] text-cream-muted/35 tracking-wider flex items-center gap-2">
+        <i data-lucide="map-pin" style="width:12px;height:12px;color:#8b1a2b;"></i>
+        Atendimento a domicílio · São Paulo e região
+       </p>
        <div class="flex gap-6">
-        <a href="#" class="text-cream-muted/30 hover:text-cream-muted/60 transition-colors" aria-label="Instagram">
+        <!-- Atualize o href com seu Instagram real -->
+        <a href="https://instagram.com/aurapiercing" target="_blank" rel="noopener noreferrer" class="text-cream-muted/30 hover:text-cream-muted/60 transition-colors" aria-label="Instagram">
           <i data-lucide="instagram" style="width:18px;height:18px;"></i>
         </a>
         <a href="https://wa.link/k8zq8d" target="_blank" rel="noopener noreferrer" class="text-cream-muted/30 hover:text-cream-muted/60 transition-colors" aria-label="WhatsApp">
           <i data-lucide="phone" style="width:18px;height:18px;"></i>
         </a>
-        <a href="#" class="text-cream-muted/30 hover:text-cream-muted/60 transition-colors" aria-label="E-mail">
+        <!-- Atualize o href com seu e-mail real -->
+        <a href="mailto:contato@aurapiercing.com.br" class="text-cream-muted/30 hover:text-cream-muted/60 transition-colors" aria-label="E-mail">
           <i data-lucide="mail" style="width:18px;height:18px;"></i>
         </a>
        </div>
@@ -483,8 +718,40 @@
 
    </div>
   </div>
+
   <script>
+    // Inicializa ícones Lucide
     lucide.createIcons();
+
+    // Menu mobile — fecha ao clicar em link ou fora
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      menuToggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    // Fecha o menu mobile ao clicar em qualquer link dentro dele
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // IntersectionObserver para animações ao rolar
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // anima só uma vez
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
  </body>
 </html>
