@@ -477,16 +477,22 @@
     <section id="artist" class="py-20 md:py-28">
      <div class="max-w-5xl mx-auto px-6">
       <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+
        <!-- Foto da artista -->
        <div class="reveal flex justify-center">
         <div class="artist-frame relative w-64 h-80 sm:w-72 sm:h-96">
-         <div class="relative z-10 w-full h-full rounded-sm overflow-hidden bg-gradient-to-br from-charcoal-light to-charcoal-deep border border-cream-muted/10 flex items-center justify-center">
-          <!-- Placeholder: substitua por <img src="foto-artista.jpg" class="w-full h-full object-cover"> -->
-          <div class="text-center px-6">
-           <div class="w-16 h-16 mx-auto mb-4 rounded-full border border-crimson/30 flex items-center justify-center">
-            <i data-lucide="user" style="width:28px;height:28px;color:#8b1a2b;opacity:0.6;"></i>
+         <div class="relative z-10 w-full h-full rounded-sm overflow-hidden bg-gradient-to-br from-charcoal-light to-charcoal-deep border border-cream-muted/10">
+          <!-- Quando tiver a foto, substitua o conteúdo abaixo por:
+               <img src="deise.jpg" class="w-full h-full object-cover object-top"> -->
+          <img src="deise.jpg" alt="Deise Paola — Aura Piercing" class="w-full h-full object-cover object-top"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="w-full h-full items-center justify-center text-center px-6" style="display:none;">
+           <div>
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full border border-crimson/30 flex items-center justify-center">
+             <i data-lucide="user" style="width:28px;height:28px;color:#8b1a2b;opacity:0.6;"></i>
+            </div>
+            <p class="font-body text-[10px] text-cream-muted/30 tracking-wider uppercase">Foto em breve</p>
            </div>
-           <p class="font-body text-[10px] text-cream-muted/30 tracking-wider uppercase">Adicione sua foto aqui</p>
           </div>
          </div>
          <!-- Decoração de canto -->
@@ -494,22 +500,49 @@
          <div class="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-crimson/40 z-20"></div>
         </div>
        </div>
+
        <!-- Texto -->
        <div class="reveal reveal-delay-2 text-center md:text-left">
-        <span class="section-eyebrow">A artista</span>
-        <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3 mb-6">Sua Nome Aqui</h2>
-        <p class="font-body text-sm text-cream-muted/55 font-light leading-relaxed mb-5">
-         Há mais de 5 anos transformando corpos em telas de arte. Especializada em curadoria de orelhas e piercings de alta joalheria, acredita que cada detalhe — do posicionamento à escolha da joia — deve ser único para quem o usa.
+        <span class="section-eyebrow">A artista por trás da Aura</span>
+        <h2 class="font-display text-3xl md:text-4xl text-cream font-light mt-3 mb-2">Deise Paola</h2>
+        <p class="font-body text-xs tracking-[0.2em] uppercase text-crimson/70 mb-7">Artista Certificada em Body Art &amp; Piercing</p>
+
+        <p class="font-body text-sm text-cream-muted/60 font-light leading-relaxed mb-5">
+         A Aura nasceu de uma paixão genuína pelo corpo como tela de expressão. Deise Paola traz para cada sessão não apenas técnica — mas escuta, cuidado e um olhar estético apurado para criar resultados que são verdadeiramente seus.
         </p>
-        <p class="font-body text-sm text-cream-muted/55 font-light leading-relaxed mb-8">
-         Formada em técnicas avançadas de piercing e certificada em biossegurança, leva a experiência de um estúdio premium diretamente à sua casa — com todo o cuidado, higiene e carinho que você merece.
+        <p class="font-body text-sm text-cream-muted/60 font-light leading-relaxed mb-8">
+         Certificada em Body Art e Piercing, com vivência prática na área e especialização em curadoria de orelha, piercing facial e corporal, Deise atende com toda a estrutura de um estúdio premium — no conforto da sua casa, na Grande São Paulo e região ABC.
         </p>
-        <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-         <span class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/50 border border-cream-muted/15 px-3 py-1.5 rounded-full">Certificada em Biossegurança</span>
-         <span class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/50 border border-cream-muted/15 px-3 py-1.5 rounded-full">Joias em Ouro &amp; Platina</span>
-         <span class="font-body text-[10px] tracking-[0.25em] uppercase text-cream-muted/50 border border-cream-muted/15 px-3 py-1.5 rounded-full">Atendimento a Domicílio</span>
+
+        <!-- Credenciais -->
+        <div class="flex flex-wrap gap-3 justify-center md:justify-start mb-8">
+         <span class="font-body text-[10px] tracking-[0.2em] uppercase text-cream-muted/55 border border-cream-muted/15 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <i data-lucide="award" style="width:11px;height:11px;color:#8b1a2b;"></i>
+          Certificada em Body Art
+         </span>
+         <span class="font-body text-[10px] tracking-[0.2em] uppercase text-cream-muted/55 border border-cream-muted/15 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <i data-lucide="shield-check" style="width:11px;height:11px;color:#8b1a2b;"></i>
+          Biossegurança
+         </span>
+         <span class="font-body text-[10px] tracking-[0.2em] uppercase text-cream-muted/55 border border-cream-muted/15 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <i data-lucide="map-pin" style="width:11px;height:11px;color:#8b1a2b;"></i>
+          Grande SP &amp; ABC
+         </span>
+         <span class="font-body text-[10px] tracking-[0.2em] uppercase text-cream-muted/55 border border-cream-muted/15 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <i data-lucide="home" style="width:11px;height:11px;color:#8b1a2b;"></i>
+          Atendimento a Domicílio
+         </span>
         </div>
+
+        <!-- Frase de impacto -->
+        <blockquote class="border-l-2 border-crimson/40 pl-4">
+         <p class="font-display text-base italic text-cream-muted/50 font-light leading-relaxed">
+          "Cada piercing é único — como a pessoa que o carrega."
+         </p>
+         <cite class="font-body text-[10px] tracking-[0.2em] uppercase text-cream-muted/30 mt-2 block not-italic">— Deise Paola</cite>
+        </blockquote>
        </div>
+
       </div>
      </div>
     </section>
